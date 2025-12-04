@@ -226,7 +226,7 @@ min_point, max_point = compute_bounding_box(pc)
 
 ## Complete Examples
 
-### 示例1：基本物体识别
+### 示例：基本物体识别
 
 ### Example 1: Basic Object Recognition
 
@@ -268,66 +268,6 @@ def main():
         # Save transformed model
         transformed = transform_pointcloud(model, pose)
         transformed.save(f"result_{i+1}.ply")
-
-if __name__ == "__main__":
-    main()
-```
-
-### 示例2：使用NumPy数组
-
-### Example 2: Using NumPy Arrays
-
-```python
-#!/usr/bin/env python3
-
-import numpy as np
-from ppf_wrapper import PPFMatcher, PointCloud
-
-def create_sample_cube():
-    """创建一个立方体点云"""
-    """Create a cube point cloud"""
-    points = []
-    for x in [0, 1]:
-        for y in [0, 1]:
-            for z in [0, 1]:
-                points.append([x, y, z])
-    
-    # 添加噪声
-    # Add noise
-    points = np.array(points, dtype=np.float32)
-    points += np.random.normal(0, 0.01, points.shape).astype(np.float32)
-    
-    return PointCloud.from_numpy(points)
-
-def main():
-    # 创建模型和场景
-    # Create model and scene
-    model = create_sample_cube()
-    model.save("cube_model.ply")
-    
-    # 创建场景（变换后的模型）
-    # Create scene (transformed model)
-    pose = np.array([
-        [1, 0, 0, 2],
-        [0, 1, 0, 1], 
-        [0, 0, 1, 0],
-        [0, 0, 0, 1]
-    ], dtype=np.float64)
-    
-    scene = transform_pointcloud(model, pose)
-    scene.save("cube_scene.ply")
-    
-    # 执行匹配
-    # Perform matching
-    matcher = PPFMatcher()
-    matcher.train_model(model)
-    
-    matches = matcher.match_scene(scene, num_matches=3)
-    
-    for i, (found_pose, score) in enumerate(matches):
-        print(f"匹配 {i+1}: 分数 = {score:.4f}")
-        print("找到的姿态矩阵:")
-        print(found_pose)
 
 if __name__ == "__main__":
     main()
@@ -526,8 +466,8 @@ def batch_match(model_path, scene_dir, output_dir):
 
 ## License
 
-本项目遵循与原始PPF Surface Match库相同的许可证。
-This project follows the same license as the original PPF Surface Match library.
+本项目遵循与原始Surface Match库相同的许可证。
+This project follows the same license as the original [Surface Match]("https://github.com/SurfaceMan/surface_match").
 
 ## 贡献
 

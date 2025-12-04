@@ -75,8 +75,8 @@ def main():
         matches = matcher.match_scene(
             scene_pc,
             sampling_distance_rel=0.025,
-            key_point_fraction=0.1,
-            min_score=0.1,
+            key_point_fraction=0.3,
+            min_score=0.01,
             num_matches=5
         )
         
