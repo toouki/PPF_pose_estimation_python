@@ -355,6 +355,21 @@ matcher.load_model("cached_model.ppf")
 PPF库自动使用OpenMP进行并行处理，无需额外配置。
 The PPF library automatically uses OpenMP for parallel processing, no additional configuration needed.
 
+### 4.自定义法向量计算
+
+### Custom Normal Computation
+
+```python
+# 如果点云没有法向量，可以手动计算
+# If point cloud has no normals, compute manually
+if not model.has_normals:
+    # 设置合适的视点
+    # Set appropriate viewpoint
+    model.set_view_point(620, 100, 500)
+    # 库会自动计算法向量
+    # Library will automatically compute normals
+```
+
 ## 故障排除
 
 ## Troubleshooting
@@ -394,84 +409,17 @@ The PPF library automatically uses OpenMP for parallel processing, no additional
    - 增加key_point_fraction / Increase key_point_fraction
    - 检查数据质量和法向量 / Check data quality and normals
 
-### 调试技巧
 
-### Debugging Tips
-
-```python
-# 启用详细输出
-# Enable verbose output
-import logging
-logging.basicConfig(level=logging.DEBUG)
-
-# 检查点云质量
-# Check point cloud quality
-print(f"模型点数: {model.num_points}")
-print(f"场景点数: {scene.num_points}")
-print(f"模型有法向量: {model.has_normals}")
-print(f"场景有法向量: {scene.has_normals}")
-
-# 可视化中间结果
-# Visualize intermediate results
-model.save("debug_model.ply")
-scene.save("debug_scene.ply")
-```
-
-## 高级用法
-
-## Advanced Usage
-
-### 自定义法向量计算
-
-### Custom Normal Computation
-
-```python
-# 如果点云没有法向量，可以手动计算
-# If point cloud has no normals, compute manually
-if not model.has_normals:
-    # 设置合适的视点
-    # Set appropriate viewpoint
-    model.set_view_point(620, 100, 500)
-    # 库会自动计算法向量
-    # Library will automatically compute normals
-```
-
-### 批量处理
-
-### Batch Processing
-
-```python
-import glob
-
-def batch_match(model_path, scene_dir, output_dir):
-    model = PointCloud.from_file(model_path)
-    matcher = PPFMatcher()
-    matcher.train_model(model)
-    
-    scene_files = glob.glob(f"{scene_dir}/*.ply")
-    
-    for scene_file in scene_files:
-        scene = PointCloud.from_file(scene_file)
-        matches = matcher.match_scene(scene, num_matches=3)
-        
-        # 保存结果
-        # Save results
-        base_name = os.path.basename(scene_file).split('.')[0]
-        for i, (pose, score) in enumerate(matches):
-            transformed = transform_pointcloud(model, pose)
-            transformed.save(f"{output_dir}/{base_name}_match_{i+1}.ply")
-```
 
 ## 许可证
 
 ## License
 
 本项目遵循与原始Surface Match库相同的许可证。
-This project follows the same license as the original [Surface Match]("https://github.com/SurfaceMan/surface_match").
+This project follows the same license as the original [Surface Match](https://github.com/SurfaceMan/surface_match).
 
 ## 贡献
 
 ## Contributing
-
-欢迎提交问题和增强请求！
-Welcome to submit issues and enhancement requests!
+感谢[SurfaceMan](https://github.com/SurfaceMan)的开源！
+欢迎提交问题和优化改进！
